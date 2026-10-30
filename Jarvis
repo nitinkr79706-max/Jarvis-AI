@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JARVIS AI</title>
+<style>
+body {
+  background: #020b18;
+  color: #00eaff;
+  font-family: Arial;
+  text-align: center;
+  padding: 20px;
+}
+h1 {
+  margin-top: 40px;
+  text-shadow: 0 0 20px #00eaff;
+}
+.circle {
+  width: 180px;
+  height: 180px;
+  border: 5px solid #00eaff;
+  border-radius: 50%;
+  margin: 40px auto;
+  box-shadow: 0 0 30px #00eaff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 35px;
+}
+button {
+  background: #00eaff;
+  color: #00111d;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 25px;
+  font-size: 17px;
+  margin: 10px;
+}
+#output {
+  margin-top: 25px;
+  font-size: 18px;
+}
+</style>
+</head>
+<body>
+
+<h1>J.A.R.V.I.S AI</h1>
+<p>Your Personal Voice Assistant</p>
+
+<div class="circle">J.A.R.V.I.S</div>
+
+<button onclick="startListening()">🎤 Talk to Jarvis</button>
+<button onclick="speak('Hello! I am Jarvis.')">🔊 Speak</button>
+
+<div id="output">Jarvis is ready...</div>
+
+<script>
+const output = document.getElementById("output");
+
+function speak(text) {
+  let speech = new SpeechSynthesisUtterance(text);
+  speech.lang = "hi-IN";
+  speech.rate = 1;
+  window.speechSynthesis.speak(speech);
+  output.innerText = text;
+}
+
+function startListening() {
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    speak("Please use Google Chrome browser.");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = "hi-IN";
+  recognition.start();
+
+  output.innerText = "Listening...";
+
+  recognition.onresult = function(event) {
+    let command = event.results[0][0].transcript.toLowerCase();
+    output.innerText = "You: " + command;
+    reply(command);
+  };
+
+  recognition.onerror = function() {
+    output.innerText = "Microphone error. Try again.";
+  };
+}
+
+function reply(command) {
+  if (command.includes("hello") || command.includes("हेलो")) {
+    speak("Hello sir! How can I help you?");
+  }
+  else if (command.includes("नाम")) {
+    speak("मेरा नाम जार्विस है।");
+  }
+  else if (command.includes("समय")) {
+    speak("अभी समय है " + new Date().toLocaleTimeString());
+  }
+  else if (command.includes("तारीख")) {
+    speak("आज की तारीख है " + new Date().toLocaleDateString());
+  }
+  else if (command.includes("गूगल")) {
+    speak("Opening Google");
+    window.open("https://www.google.com", "_blank");
+  }
+  else if (command.includes("यूट्यूब")) {
+    speak("Opening YouTube");
+    window.open("https://www.youtube.com", "_blank");
+  }
+  else if (command.includes("बाय")) {
+    speak("Goodbye sir!");
+  }
+  else {
+    speak("माफ कीजिए, मैं यह कमांड अभी नहीं समझ पाया।");
+  }
+}
+</script>
+
+</body>
+</html>
